@@ -1,0 +1,19 @@
+{
+  "name": "mapfilestyler",
+  "version": "0.0.0",
+  "authors": [
+    "Matthias Pfeil <matthias.pfeil@wwu.de>"
+  ],
+  "description": "app for styling mapserver mapfiles",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
