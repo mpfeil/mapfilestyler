@@ -19,5 +19,11 @@ Ext.define('MFS.store.Styles', {
             writeAllFields: true,
             root: 'data'
         }
+    },
+
+    listeners: {
+        update: function(store) {
+            Ext.getCmp('applyNewStyles').setDisabled(false);
+        }
     }
 });

@@ -342,10 +342,10 @@ Ext.application({
           xtype: 'gridcolumn',
           text: "Outlinecolor",
           flex: 1,
-          dataIndex: "outlinecolor",
           editor:{
             xtype: 'ux.colorpickerfield',
           },
+          dataIndex: "outlinecolor",
           resizable: false,
           sortable: false
         },
@@ -453,7 +453,7 @@ Ext.application({
       ];
 
       var grid = new Ext.grid.GridPanel({
-        store: 'Classes',
+        store: classesStore,
         columns: [
           {
             xtype: 'gridcolumn',
@@ -461,12 +461,13 @@ Ext.application({
             flex: 1,
             dataIndex: "name",
             editor:'textfield',
-            resizable: false
+            resizable: false,
+            sortable: false
           }
         ],
         plugins: [{
           ptype: 'rowexpanderplus',
-          pluginId: 'expanderplus',
+          pluginId: 'rowexpanderplus',
           selectRowOnExpand: true,
           expandOnDblClick: false,
           rowBodyTpl: ['<div id="ClassGridRow-{id}" ></div>']
@@ -477,10 +478,10 @@ Ext.application({
               styleStore.clearFilter();
 
               styleStore.filter({
-                  property: 'className',
-                  value: record.get('name'),
-                  exactMatch: true,
-                  caseSensitive: true
+                property: 'className',
+                value: record.get('name'),
+                exactMatch: true,
+                caseSensitive: true
               });
 
               var className = record.get('name');
@@ -488,15 +489,11 @@ Ext.application({
               var targetId = 'ClassGridRow-' + record.get('id');
               if (Ext.getCmp(targetId + "_grid") == null) {
 
-                // var cellEditing = new Ext.grid.plugin.CellEditing({
-                //     clicksToEdit: 1
-                // });
-
                 var classGridRow = Ext.create('Ext.grid.Panel',{
                   store: styleStore,
                   forceFit: true,
                   columns: columns,
-                  selType: 'cellmodel',
+                  // selType: 'cellmodel',
                   plugins:[
                     cellEditing
                   ],
@@ -532,14 +529,14 @@ Ext.application({
                   renderTo: targetId,
                   id: targetId + "_grid",
                 });
-                  rowNode.grid = classGridRow;
-                  classGridRow.getEl().swallowEvent(['mouseover', 'mousedown', 'click', 'dblclick', 'onRowFocus']);
-                  classGridRow.fireEvent("bind", classGridRow, { id: record.get('id') });
+                rowNode.grid = classGridRow;
+                classGridRow.getEl().swallowEvent(['mouseover', 'mousedown', 'click', 'dblclick', 'onRowFocus']);
+                classGridRow.fireEvent("bind", classGridRow, { id: record.get('id') });
               } else {
-                  var grid = Ext.getCmp(targetId + "_grid");
-                  cellEditing.init(grid);
-                  grid.plugins.push(cellEditing);
-                  grid.getView().refresh();
+                var grid = Ext.getCmp(targetId + "_grid");
+                cellEditing.init(grid);
+                grid.plugins.push(cellEditing);
+                grid.getView().refresh();
               }
             }
           },
@@ -552,7 +549,8 @@ Ext.application({
         renderTo: Ext.getBody(),
         tbar: [{
           text: 'Apply new styles',
-          // scope: Ext.grid.dummyStyleData,
+          id: 'applyNewStyles',
+          disabled: true,
           handler: function() {
 
             styleStore.clearFilter();
@@ -568,10 +566,10 @@ Ext.application({
                 method: 'POST',
                 url: 'php/MapScriptHelper.php',
                 params: {
-                    function: 'updateStyles',
-                    mapFile: mapFile,
-                    layerName: layerName,
-                    data: jsonData
+                  function: 'updateStyles',
+                  mapFile: mapFile,
+                  layerName: layerName,
+                  data: jsonData
                 },
                 success: function(response){
 
@@ -587,6 +585,10 @@ Ext.application({
             styleStore.getProxy().setExtraParam('mapFile',Ext.getCmp('mapFilePath').getValue());
             styleStore.getProxy().setExtraParam('layerName',Ext.getCmp('cbLayer').getValue());
             styleStore.load();
+
+            Ext.getCmp('applyNewStyles').setDisabled(true);
+
+            layer.redraw(true);
           }
         }],
       });
