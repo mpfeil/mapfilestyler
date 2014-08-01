@@ -40,7 +40,9 @@
 			}
 
 			if ($type == "ss") {
-				# code...
+				$colors = array(hex2rgb($startColor));
+				$breaks = array('Single Symbol');
+				saveToMapFile($map,$layer,$attribute,$type,$breaks,$colors,$mapFile);
 			} else if($type == "cs") {
 				$featuresInLayer = getNumOfFeatures($map,$layer,$attribute);
 				$colors = getColors(hex2rgb($startColor),hex2rgb($endColor),count($featuresInLayer));
@@ -130,20 +132,17 @@
 		}
 
 		//create classObject (set Name(Layername), set Expression(filter for different styling))
-		error_log("COUNT");
-		error_log(count($breaks));
-		error_log(print_r($breaks,1));
-
 		for ($i=0; $i < count($breaks); $i++) {
 			$class = new classObj($layer);
 
 			if ($type == "cs") {
 				$class->set("name",$breaks[$i]);
 				$class->setExpression("('[$field]' = '$breaks[$i]')");
+			} else if ($type == "ss") {
+				$class->set("name",$breaks[$i]);
 			} else {
 				$j= $i+1;
 				//check if it is the starting class
-				error_log($breaks[$i]);
 				if ($i == 0) {
 					$class->set("name", $breaks[$i] . " - " . $breaks[$j]);
 					$class->setExpression("(([$field] >= $breaks[$i]) AND ([$field] <= $breaks[$j]))");
@@ -278,7 +277,7 @@
 			$class = $layer->getClass($i);
 			$expression = $class->getExpressionString();
 			$name = utf8_decode($class->name);
-			error_log(htmlentities($name, ENT_COMPAT | ENT_HTML5, "ISO8859-1", false));
+			// error_log(htmlentities($name, ENT_COMPAT | ENT_HTML5, "ISO8859-1", false));
 			$attr .= "{'id':'$name','name':'$name','index':'$i'},";
 		}
 

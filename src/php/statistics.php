@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	//generates equal interval symbols
 	function equalInterval($data, $classes) {
@@ -9,25 +9,25 @@
 		$resultArray = array();
 
 		array_push($resultArray, $min);
-		for ($i=0; $i < $classes; $i++) { 
+		for ($i=0; $i < $classes; $i++) {
 			$test = $resultArray[$i]+$range;
 			array_push($resultArray, $test);
 		}
-		
+
 		return $resultArray;
 	}
 
 	function jenks($data, $n_classes) {
 
 		// Compute the matrices required for Jenks breaks. These matrices
-    	// can be used for any classing of data with `classes <= n_classes`
+  	// can be used for any classing of data with `classes <= n_classes`
 		function getMatrices($data,$n_classes) {
 
 			// in the original implementation, these matrices are referred to
-	        // as `LC` and `OP`
-	        //
-	        // * lower_class_limits (LC): optimal lower class limits
-	        // * variance_combinations (OP): optimal variance combinations for all classes
+      // as `LC` and `OP`
+      //
+      // * lower_class_limits (LC): optimal lower class limits
+      // * variance_combinations (OP): optimal variance combinations for all classes
 			$lower_class_limits = array();
 			$variance_combinations = array();
 			// loop counters
@@ -37,10 +37,10 @@
 			$variance = 0;
 
 			// Initialize and fill each matrix with zeroes
-			for ($i=0; $i < count($data)+1; $i++) { 
+			for ($i=0; $i < count($data)+1; $i++) {
 				$tmp1 = array();
 				$tmp2 = array();
-				for ($j=0; $j < $n_classes + 1; $j++) { 
+				for ($j=0; $j < $n_classes + 1; $j++) {
 					array_push($tmp1, 0);
 					array_push($tmp2, 0);
 				}
@@ -48,10 +48,10 @@
 				array_push($variance_combinations, $tmp2);
 			}
 
-			for ($i=1; $i < $n_classes + 1; $i++) { 
+			for ($i=1; $i < $n_classes + 1; $i++) {
 				$lower_class_limits[1][$i] = 1;
 				$variance_combinations[1][$i] = 0;
-				for ($j=2; $j < count($data)+1; $j++) { 
+				for ($j=2; $j < count($data)+1; $j++) {
 					$variance_combinations[$j][$i] = 9999999;
 				}
 			}
@@ -63,20 +63,20 @@
 				$i4 = 0;
 
 				for ($m=1; $m <  $l + 1; $m++) {
-					
+
 					$lower_class_limit = $l - $m + 1;
 
 					$val = $data[$lower_class_limit - 1];
-					
+
 					$w++;
-					
+
 					$sum += $val;
 					$sum_squares += $val * $val;
-	
+
 					$variance = $sum_squares - ($sum * $sum) / $w;
-				
+
 					$i4 = $lower_class_limit - 1;
-			
+
 					if ($i4 !== 0) {
 						for ($j=2; $j < $n_classes + 1; $j++) {
 							if ($variance_combinations[$l][$j] >= ($variance + $variance_combinations[$i4][$j-1])) {
@@ -86,7 +86,7 @@
 						}
 					}
 				}
-				
+
 				$lower_class_limits[$l][1] = 1;
             	$variance_combinations[$l][1] = $variance;
 			}
@@ -114,7 +114,7 @@
 	        	$k = $lower_class_limits[$k][$countNum]-1;
 	        	$countNum--;
 	        }
-	 
+
 	        return $kclass;
 		}
 
@@ -122,7 +122,7 @@
 			return null;
 		}
 
-		//sort data in numerical order, expected by matrices function 
+		//sort data in numerical order, expected by matrices function
 		sort($data);
 
 		// get our basic matrices
@@ -159,7 +159,7 @@
 		$n = count($data);
 		$min = min($data);
 		$max = max($data);
-		for ($i=0; $i < $n; $i++) { 
+		for ($i=0; $i < $n; $i++) {
 			$mean = $mean + $data[$i];
 		}
 		$mean = $mean / $n;
@@ -205,7 +205,7 @@
 		if ($i_small) {
 			if ($cell > 10) {
 				$cell = 9 + $cell / 10;
-      			$cell = $cell * $shrink_sml;	
+      			$cell = $cell * $shrink_sml;
 			}
 			if ($min_n > 1) {
 				$cell = $cell / $min_n;
@@ -221,7 +221,7 @@
 			$cell = 20 * 1e-07;
 		}
 
-		$base = pow(10.0, floor(log10($cell))); 
+		$base = pow(10.0, floor(log10($cell)));
 		$unit = $base;
 		if ((2 * $base) - $cell < $h * ($cell - $unit)) {
 			$unit = 2.0 * $base;
@@ -278,8 +278,8 @@
 	function pretty($data,$classes) {
 		$min = min($data);
 		$max = max($data);
-		
-		return rpretty($min,$max,$classes);	
+
+		return rpretty($min,$max,$classes);
 	}
 
 ?>

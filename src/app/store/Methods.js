@@ -5,7 +5,7 @@ Ext.define('MFS.store.Methods', {
 
   data : [
     {"abbr":"ei", "name":"Equal Interval"},
-    {"abbr":"qec", "name":"Quantile (Equal Count)"},
+    {"abbr":"quec", "name":"Quantile (Equal Count)"},
     {"abbr":"nb", "name":"Natural Breaks"},
     {"abbr":"sd", "name":"Standard Deviation"},
     {"abbr":"pb", "name":"Pretty Breaks"}

@@ -182,15 +182,25 @@ Ext.application({
                 attributesStore.getProxy().setExtraParam('dataSource',datasource);
                 attributesStore.getProxy().setExtraParam('layerName',Ext.getCmp('cbLayer').getValue());
                 switch(value[0].data.abbr) {
+                  case "cs":
+                    Ext.getCmp('cbMethod').hide();
+                    Ext.getCmp('nfClasses').hide();
+                    Ext.getCmp('colorLabel').show();
+                    Ext.getCmp('endColor').show();
+                    break;
                   case "gs":
                     attributesStore.getProxy().setExtraParam('onlyContinuesAttributes', true);
                     Ext.getCmp('cbMethod').show();
                     Ext.getCmp('nfClasses').show();
+                    Ext.getCmp('colorLabel').show();
+                    Ext.getCmp('endColor').show();
                     break;
                   default:
                     attributesStore.getProxy().setExtraParam('onlyContinuesAttributes', false);
                     Ext.getCmp('cbMethod').hide();
                     Ext.getCmp('nfClasses').hide();
+                    Ext.getCmp('colorLabel').hide();
+                    Ext.getCmp('endColor').hide();
                     break;
                 }
                 attributesStore.load();
@@ -259,10 +269,11 @@ Ext.application({
             },{
               xtype: 'label',
               text: '-',
-              margin: '5 10 5 10'
+              margin: '5 10 5 10',
+              id: 'colorLabel'
             },{
               xtype: 'ux.colorpickerfield',
-              id: 'endColor'
+              id: 'endColor',
             }
           ]
         },
@@ -559,7 +570,7 @@ Ext.application({
             var layerName = Ext.getCmp('cbLayer').getValue();
             var jsonData = Ext.encode(Ext.Array.pluck(styleStore.data.items, 'data'));
 
-            var exp = grid.getPlugin('expanderplus');
+            var exp = grid.getPlugin('rowexpanderplus');
             exp.collapseLastRow();
 
             Ext.Ajax.request({
