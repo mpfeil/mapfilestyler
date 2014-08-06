@@ -315,8 +315,6 @@
 		$attr .= "]}";
 
 		return $attr;
-
-		// return $result;
 	}
 
 	// deprecated
@@ -352,18 +350,23 @@
 			$class = $layer->getClass($i);
 			$className = $class->name;
 			$index = 0;
-			// $color = "";
-			// $outlineColor = "";
-			// $width = "";
-			// $size = "";
-			// $symbol = "";
-			// $pattern = "";
 			$patternString = "";
-			// $gap = "";
+
 			for ($j=0; $j < $class->numstyles; $j++) {
 				$style = $class->getStyle($j);
-				$color = rgb2hex([$style->color->red,$style->color->green,$style->color->blue]);
-				$outlineColor = rgb2hex([$style->outlinecolor->red,$style->outlinecolor->green,$style->outlinecolor->blue]);
+				error_log($style->color->red);
+				error_log($style->color->green);
+				error_log($style->color->blue);
+				if ($style->color->red > -1 && $style->color->green > -1 && $style->color->blue > -1) {
+					$color = rgb2hex([$style->color->red,$style->color->green,$style->color->blue]);
+				} else {
+					$color = "";
+				}
+				if ($style->outlinecolor->red > -1 && $style->outlinecolor->green > -1 && $style->outlinecolor->blue > -1) {
+					$outlineColor = rgb2hex([$style->outlinecolor->red,$style->outlinecolor->green,$style->outlinecolor->blue]);
+				} else {
+					$outlineColor = "";
+				}
 				$width = $style->width;
 				$size = $style->size;
 				$symbol = $style->symbolname;
